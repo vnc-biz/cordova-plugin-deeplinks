@@ -40,11 +40,11 @@ function run(cordovaContext) {
 
   platformsList.forEach(function(platform) {
     switch (platform) {
-      case ANDROID:
-        {
-          activateUniversalLinksInAndroid(cordovaContext, pluginPreferences);
-          break;
-        }
+      // case ANDROID:
+      //   {
+      //     activateUniversalLinksInAndroid(cordovaContext, pluginPreferences);
+      //     break;
+      //   }
       case IOS:
         {
           activateUniversalLinksInIos(cordovaContext, pluginPreferences);
