@@ -138,12 +138,12 @@ function loadProjectFile() {
   
   try {
       // try pre-5.0 cordova structure
-      platform_ios = context.requireCordovaModule('cordova-lib/src/plugman/platforms')['ios'];
+      platform_ios = require('cordova-lib/src/plugman/platforms')['ios'];
       projectFile = platform_ios.parseProjectFile(iosPlatformPath());
   } catch (e) {
       try {
           // let's try cordova 5.0 structure
-          platform_ios = context.requireCordovaModule('cordova-lib/src/plugman/platforms/ios');
+          platform_ios = require('cordova-lib/src/plugman/platforms/ios');
           projectFile = platform_ios.parseProjectFile(iosPlatformPath());
       } catch (e) {
           // Then cordova 7.0
@@ -166,7 +166,7 @@ function loadProjectFile() {
               var frameworks_file = path.join(iosPlatformPath(), 'frameworks.json');
               var frameworks = {};
               try {
-                  frameworks = context.requireCordovaModule(frameworks_file);
+                  frameworks = require(frameworks_file);
               } catch (e) { }
               
               fs.writeFileSync(pbxPath, xcodeproj.writeSync());
