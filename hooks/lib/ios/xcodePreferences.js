@@ -12,7 +12,6 @@ var ConfigXmlHelper = require('../configXmlHelper.js');
 var IOS_DEPLOYMENT_TARGET = '8.0';
 var COMMENT_KEY = /_comment$/;
 var context;
-var globSync = require('glob');
 
 module.exports = {
   enableAssociativeDomainsCapability: enableAssociativeDomainsCapability
@@ -136,7 +135,7 @@ function isPbxReferenceAlreadySet(fileReferenceSection, entitlementsRelativeFile
 function loadProjectFile() {
   var platform_ios;
   var projectFile;
-
+  
   try {
       // try pre-5.0 cordova structure
       platform_ios = require('cordova-lib/src/plugman/platforms')['ios'];
@@ -148,29 +147,29 @@ function loadProjectFile() {
           projectFile = platform_ios.parseProjectFile(iosPlatformPath());
       } catch (e) {
           // Then cordova 7.0
-          console.log("cordova deeplinks - loading project files");
-          var project_files = globSync(path.join(iosPlatformPath(), '*.xcodeproj', 'project.pbxproj'));
-
+	  console.log("cordova deeplinks - loading project files");
+          var project_files = require('glob').sync(path.join(iosPlatformPath(), '*.xcodeproj', 'project.pbxproj'));
+          
           if (project_files.length === 0) {
               throw new Error('does not appear to be an xcode project (no xcode project file)');
           }
-
+          
           var pbxPath = project_files[0];
-
+          
           var xcodeproj = require('xcode').project(pbxPath);
           xcodeproj.parseSync();
-
+          
           projectFile = {
               'xcode': xcodeproj,
               write: function () {
                   var fs = require('fs');
-
+                  
               var frameworks_file = path.join(iosPlatformPath(), 'frameworks.json');
               var frameworks = {};
               try {
                   frameworks = require(frameworks_file);
               } catch (e) { }
-
+              
               fs.writeFileSync(pbxPath, xcodeproj.writeSync());
                   if (Object.keys(frameworks).length === 0){
                       // If there is no framework references remain in the project, just remove this file
@@ -182,9 +181,9 @@ function loadProjectFile() {
           };
       }
   }
-
+  
   return projectFile;
-  }
+  } 
 
 /**
  * Remove comments from the file.
